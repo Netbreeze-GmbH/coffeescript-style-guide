@@ -15,7 +15,7 @@ Please note that this is a work-in-progress.
         * [Blank Lines](#blank_lines)
         * [Trailing Whitespace](#trailing_whitespace)
         * [Encoding](#encoding)
-    * [Module Imports](#module_imports)
+    * [Module Imports and Layout](#module_imports)
     * [Whitespace in Expressions and Statements](#whitespace)
     * [Comments](#comments)
         * [Block Comments](#block_comments)
@@ -69,19 +69,35 @@ Do not include trailing whitespace on any lines.
 UTF-8 is the only source file encoding.
 
 <a name="module_imports"/>
-## Module Imports
+## Module Imports and Layout
 
 If using a module system (CommonJS Modules, AMD, etc.), `require` statements should be placed on separate lines.
 
-```coffeescript
-require 'lib/setup'
-Backbone = require 'backbone'
-```
 These statements should be grouped in the following order:
 
-1. Standard library imports _(if a standard library exists)_
-2. Third party library imports
-3. Local imports _(imports specific to this application or library)_
+1. Standard library imports _(if a standard library exists i.E. Node.js core libs)_
+2. Third party library imports _(i.E. anything comming from package.json dependencies and `require`d via the name)_
+3. Local imports _(imports specific to this application or library i.E `require`d via the path)_
+
+A module must have following layout
+
+```coffeescript
+###
+This is an optional header for License requirements. Appears in JS too
+###
+
+'use strict'  # use strict pragma is the very first expression
+# all the reqires following
+http = require 'http' # Node core lib
+express = require 'express' # Third party lib in dependencies
+myUtil = require '../util'  # Own module
+
+# module privates: vars, funcs etc.
+
+# end of privates, publics following. in AMD (Node.js) here assignements to `exports`, in plain modules the `return` statement with api-obj
+
+module.exports.init = init
+```
 
 <a name="whitespace"/>
 ## Whitespace in Expressions and Statements
@@ -224,7 +240,7 @@ Methods and variables that are intended to be "private" should begin with a lead
 _privateMethod: ->
 ```
 
-This convention is here for completeness. **Create true privacy with module pattern instead.**
+This convention is here for completeness. **Create true privacy with modle pattern instead.**
 
 <a name="objects"/>
 ## Objects
