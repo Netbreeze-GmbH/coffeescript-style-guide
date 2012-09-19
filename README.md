@@ -421,7 +421,7 @@ Use splats (`...`) when working with functions that accept variable numbers of a
 ```coffeescript
 console.log args... # Yes
 
-(a, b, c, rest...) -> # Yes
+(a, b, c, rest...)-> # Yes
 ```
 
 
