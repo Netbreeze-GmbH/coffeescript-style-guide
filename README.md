@@ -21,6 +21,7 @@ Please note that this is a work-in-progress.
         * [Block Comments](#block_comments)
         * [Inline Comments](#inline_comments)
     * [Naming Conventions](#naming_conventions)
+    * [Objects](#objects)
     * [Functions](#functions)
     * [Strings](#strings)
     * [Conditionals](#conditionals)
@@ -28,6 +29,7 @@ Please note that this is a work-in-progress.
     * [Extending Native Objects](#extending_native_objects)
     * [Exceptions](#exceptions)
     * [Annotations](#annotations)
+    * [Documentation](#documentation)
     * [Miscellaneous](#miscellaneous)
 
 ## Avoid hacky code!
@@ -223,6 +225,59 @@ _privateMethod: ->
 ```
 
 This convention is here for completeness. **Create true privacy with module pattern instead.**
+
+<a name="objects"/>
+## Objects
+
+Use YAML-style for object literals in assignments and as return values, drop braces and comas. If used as return value prove if it's more readable to wrap in curly braces or assign to a variable first.
+
+Use JavaScript-style wenn inlined elsewhere.
+
+```coffeescript
+assignment =
+  prop1: true
+  prop2:
+    inner1: false
+
+    func: ->
+      funcBody()
+      # as return value
+      retObjProp: 'first val'
+      retObjProp1: 'second val'
+
+some.doSomething true, {prop1: true, prop2: false}
+```
+
+It's OK and common sense to inline objects in function calls. However if the object is bigger or is nesting other obj (and the nest even more), it's probably better to assign it to a variable first.
+
+
+```coffeescript
+# No
+some.doSomething true, {
+                        prop1: true,
+                        prop2:
+                          inner1: false,
+
+                          func: ->
+                            funcBody()
+                            # as return value
+                            retObjProp: 'first val'
+                            retObjProp1: 'second val'
+                        }
+# Yes
+myArg =
+  prop1: true
+  prop2:
+    inner1: false
+
+    func: ->
+      funcBody()
+      # as return value
+      retObjProp: 'first val'
+      retObjProp1: 'second val'
+
+some.doSomething true, myArg
+```
 
 <a name="functions"/>
 ## Functions
@@ -484,6 +539,7 @@ Annotation types:
 
 If a custom annotation is required, the annotation should be documented in the project's README.
 
+<a name="documentation"/>
 ## Documentation
 
 Annotate more complex functions, methods and constructor functions with contract docs, especially if they have side-effects:
