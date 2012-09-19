@@ -2,9 +2,9 @@
 
 This guide presents a collection of best-practices and coding conventions for the [CoffeeScript][coffeescript] programming language.
 
-This fork is used to establish guidlines for our organisation
+This fork is used to establish guidlines for our organisation.
 
-Please note that this is a work-in-progress.
+**Note:** This document is living and subject of discussions on retrospectives
 
 ## Table of Contents
 
@@ -34,7 +34,7 @@ Please note that this is a work-in-progress.
 
 ## Avoid hacky code!
 
-_avoid hacky code
+**Avoid hacky code**
 
 <a name="code_layout"/>
 ## Code layout
@@ -42,12 +42,14 @@ _avoid hacky code
 <a name="tabs_or_spaces"/>
 ### Tabs or Spaces?
 
-Use **spaces only**, with **2 spaces** per indentation level. Never mix tabs and spaces.
+Use **spaces only**, with **2 spaces** per indentation level. Use a proper editor, which allows you to handle tab-space replacements.
+
+It's usefull when your editor can display spaces.
 
 <a name="maximum_line_length"/>
 ### Maximum Line Length
 
-Limit all lines to a maximum of 120 characters.
+Limit all lines to a maximum of **120** characters.
 
 <a name="blank_lines"/>
 ### Blank Lines
@@ -66,10 +68,12 @@ Do not include trailing whitespace on any lines.
 <a name="encoding"/>
 ### Encoding
 
-UTF-8 is the only source file encoding.
+**UTF-8** is the only source file encoding.
 
 <a name="module_imports"/>
 ## Module Imports and Layout
+
+Use modules!
 
 If using a module system (CommonJS Modules, AMD, etc.), `require` statements should be placed on separate lines.
 
@@ -86,16 +90,18 @@ A module must have following layout
 This is an optional header for License requirements. Appears in JS too
 ###
 
-'use strict'  # use strict pragma is the very first expression
+'use strict'  # use strict pragma is the very first statement
+
 # all the reqires following
 http = require 'http' # Node core lib
 express = require 'express' # Third party lib in dependencies
 myUtil = require '../util'  # Own module
 
 # module privates: vars, funcs etc.
+init = -> # some code here
+# end of privates, publics following.
 
-# end of privates, publics following. in AMD (Node.js) here assignements to `exports`, in plain modules the `return` statement with api-obj
-
+# In Common.Js (Node.js) here assignements to `exports`, in plain modules the `return` statement with api-obj.
 module.exports.init = init
 ```
 
@@ -184,7 +190,7 @@ Paragraphs inside of block comments are separated by a line containing a single 
   stop()
 ```
 
-CoffeeScript has block comment notation with `###`. Use it only for headers like license information etc. This blocks will be take over to js source.
+CoffeeScript has block comment notation with `###`. Use it only for headers like license information etc. This blocks will be taken over to JS source.
 
 <a name="inline_comments"/>
 ### Inline Comments
@@ -224,11 +230,11 @@ For constants, use all uppercase with underscores:
 CONSTANT_LIKE_THIS
 ```
 
-Please note: _JavaScript and CoffeeScript do not know real constants. This one is only a convention. One possible way to create true constants is to use `Object.freeze` in ECMA5-supported [environments](http://kangax.github.com/es5-compat-table/)
+**Note:** _JavaScript and CoffeeScript do not know real constants. This is only a convention. One possible way to create true constants is to use `Object.freeze` in ECMA5-supported [environments](http://kangax.github.com/es5-compat-table/)_
 
 ```coffeescript
 CONSTANTS =
-  PI : 'test'
+  PI : 3.14
   LOCALHOST : 'localhost'
 
 Object.freeze CONSTANTS
@@ -245,7 +251,9 @@ This convention is here for completeness. **Create true privacy with modle patte
 <a name="objects"/>
 ## Objects
 
-Use YAML-style for object literals in assignments and as return values, drop braces and comas. If used as return value prove if it's more readable to wrap in curly braces or assign to a variable first.
+Use YAML-style for object literals in assignments and as return values, drop braces and comas. Allign at values.
+
+If used as return value prove if it's more readable to wrap in curly braces or assign to a variable first.
 
 Use JavaScript-style wenn inlined elsewhere.
 
@@ -257,14 +265,14 @@ assignment =
 
     func: ->
       funcBody()
-      # as return value
-      retObjProp: 'first val'
+      # as return value. this object is aligned by value
+      retObjProp:  'first val'
       retObjProp1: 'second val'
 
 some.doSomething true, {prop1: true, prop2: false}
 ```
 
-It's OK and common sense to inline objects in function calls. However if the object is bigger or is nesting other obj (and the nest even more), it's probably better to assign it to a variable first.
+It's OK and common sense to inline objects in function calls. However if the object is bigger or is nesting other obj (and they nest even more), it's probably better to assign it to a variable first.
 
 
 ```coffeescript
@@ -275,9 +283,7 @@ some.doSomething true, {
                           inner1: false,
 
                           func: ->
-                            funcBody()
-                            # as return value
-                            retObjProp: 'first val'
+                            retObjProp:  'first val'
                             retObjProp1: 'second val'
                         }
 # Yes
@@ -287,9 +293,7 @@ myArg =
     inner1: false
 
     func: ->
-      funcBody()
-      # as return value
-      retObjProp: 'first val'
+      retObjProp:  'first val'
       retObjProp1: 'second val'
 
 some.doSomething true, myArg
@@ -319,7 +323,7 @@ compiles to
 elem.bind(foo)(function() {});
 ```
 
-we chose to use the rule: **attach parentheses to the function they belong to**. So this rule can help us to identify such errors faster.
+We chose to use the rule: **attach parentheses to the function they belong to**. So this rule can help us to identify such errors faster.
 
 Do not use parentheses when declaring functions that take no arguments:
 
@@ -331,7 +335,7 @@ bar = ()-> # No
 In cases where method calls are being chained and the code does not fit on a single line, each call should be placed on a separate line and indented by one level (i.e., two spaces), with a leading `.`.
 Also use this rule to seperate chain-methods from arguments being passed to them, when it serves readability.
 
-Note: _It's best practice not to use method chaining in unstable code. Long chains are harder to debug._
+**Note:** _It's best practice not to use method chaining in unstable code. Long chains are harder to debug._
 
 ```coffeescript
 [1..3]
@@ -347,12 +351,12 @@ $('#myid')
 ```
 
 When calling functions, stick to this rules:
-* omit parentheses except for chaining calls. If parentheses used stick to the method they belongs to.
+* omit parentheses except for chaining calls. If parentheses used, stick them to the method they belongs to.
 * always use comas to separate arguments.
-* always encapsulate inlined objects in curly braces, if it's not the only argument
-* always encapsulate inlined functions in parentheses, if it's not the only argument
-* always encapsulate function calls in parentheses if function is called in an argument list (so called function grouping). Indent after `(` if the inlined call takes longer argument list.
-* body of inlined functions should contain not more than 3 lines. If it does, it's probably better to define it somewhere else first
+* always encapsulate inlined object in curly braces, if it's not the only argument.
+* always encapsulate inlined function defintion in parentheses, if it's not the only argument.
+* always encapsulate function calls in parentheses if function is called in an argument list (so called function grouping, see below). Indent after `(` if the inlined call takes longer or nested argument list.
+* body of inlined functions should contain not more than 3 lines. If it does, it's probably better to define it somewhere else first.
 
 ```coffeescript
 elem.bind foo, test:1, test2:2, -> alert      # No
@@ -408,7 +412,7 @@ myFunc.displayName = 'myFunc'
 
 ### Arguments
 
-Keep the argument list short. Argument lists longer than 4 are a code smell.
+Keep the argument list short. Lists containing more than **4** arguments are a code smell.
 
 Group all optional arguments in a flat object hash. Use destructuring assignment for extracting values.
 
@@ -423,7 +427,7 @@ console.log args... # Yes
 
 If the function accepts a callback, take it as last argument.
 
-If the function accepts an Error object i.E. a typical callback, take it as first argument.
+If the function accepts an Error object _i.E. a typical callback_, take it as first argument.
 
 <a name="strings"/>
 ## Strings
@@ -437,12 +441,12 @@ Use string interpolation instead of string concatenation:
 
 Prefer single quoted strings (`''`) instead of double quoted (`""`) strings, unless features like string interpolation are being used for the given string.
 
-Use block strings to hold formatted or indentation-sensitive text.
+Use block strings to hold formatted or indentation-sensitive text instead of special whitespace characters (`'\n\t'`).
 
 <a name="conditionals"/>
 ## Conditionals
 
-Avoid `then`. Prefer postfix for single-line single-branched `if` and `unless` or multi-line form with indentations otherwise
+Avoid `then`. Prefer postfix notation for single-line single-branched `if` and `unless` or multi-line form with indentations otherwise.
 
 ```coffeescript
 # Yes
@@ -479,7 +483,7 @@ Favor `unless` over `if` for negative conditions, but use `if...else` instead of
 <a name="looping_and_comprehensions"/>
 ## Looping and Comprehensions
 
-Take advantage of comprehensions whenever possible, prefer them over native functions like Array#forEach etc.:
+Take advantage of comprehensions whenever possible, prefer them over native functions like Array#forEach etc. Wrap comprehensions in braces when used in assignments.
 
 ```coffeescript
   # Yes
@@ -607,14 +611,18 @@ Types are:
 
 `is` is preferred over `==`.
 
+`isnt` is preferred over `!=`.
+
 `not` is preferred over `!`.
 
-`or=` should be used when possible:
+`or=` should be used when possible.:
 
 ```coffeescript
 temp or= {} # Yes
 temp = temp || {} # No
 ```
+
+**Note**: `temp` in this example must be defined before using conditional assignment
 
 Prefer shorthand notation (`::`) for accessing an object's prototype:
 
