@@ -578,7 +578,7 @@ backCaller = (first, next = [], opts, cb)->  # this one takes four arguments, re
 # ! Error when throwIt is true
 # ~ @otherProp modified
 other = (opts = {}, strategy)-> # takes 2 arguments, returns a boolean, throws an error and modifies the state of this
-  {thowIt, otherProp} = opts
+  {throwIt, otherProp} = opts
   throw new Error() if throwIt
   @otherProp = otherProp
   strategy otherProp,'refernce'
