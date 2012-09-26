@@ -568,24 +568,34 @@ Annotate more complex functions, methods and constructor functions with contract
 * exceptional behaivior: conditions when the function code throws errors
 * any side-effects
 
+**Example 1:** This method takes four arguments, return type is irrelevant, no side effects, no errors thrown.
+
 ```coffeescript
 # [Boolean , Array(String), Options, Callback]
-backCaller = (first, next = [], opts, cb)->  # this one takes four arguments, return type is irrelevant, no side effects, no errors thrown
+backCaller = (first, next = [], opts, cb)->
   {opt1,opt2} = opts
   cb null, (result first)
+```
 
+**Example 2:** This method takes 2 arguments, returns a boolean, throws an error and modifies the state of this.
+
+```coffeescript
 # [Options, Function(String,String) -> Boolean] -> Boolean
 # ! Error when throwIt is true
 # ~ @otherProp modified
-other = (opts = {}, strategy)-> # takes 2 arguments, returns a boolean, throws an error and modifies the state of this
+other = (opts = {}, strategy)->
   {throwIt, otherProp} = opts
   throw new Error() if throwIt
   @otherProp = otherProp
   strategy otherProp,'refernce'
+```
 
+**Example 3:** A common callback with additional resp paramter of type http.Response, nothing returned but error will be thrown if any passed.
+
+```coffeescript
 # Callback(+http.Response)
 # ! Error when err exists
-myCallback = (err, data, resp)->  # a common callback with additional resp paramter of type http.Response, nothing returned but error will be thrown if any passed
+myCallback = (err, data, resp)->
   throw err if err?
   process data
 ```
