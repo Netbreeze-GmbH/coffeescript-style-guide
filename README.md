@@ -333,7 +333,7 @@ bar = ()-> # No
 ```
 
 In cases where method calls are being chained and the code does not fit on a single line, each call should be placed on a separate line and indented by one level (i.e., two spaces), with a leading `.`.
-Also use this rule to seperate chain-methods from arguments being passed to them, when it serves readability.
+Also use this rule to seperate chain-methods from arguments being passed to them, when it serves readability. Omit argument parentheses on last call in the chain to mark it as end.
 
 **Note:** _It's best practice not to use method chaining in unstable code. Long chains are harder to debug._
 
@@ -342,12 +342,12 @@ Also use this rule to seperate chain-methods from arguments being passed to them
   .map((x) -> x * x)
   .concat([10..12])
   .filter((x) -> x < 11)
-  .reduce((x, y) -> x + y)
+  .reduce (x, y) -> x + y
 
 $('#myid')
   .css({boder:'1px',color : 'blue'})
   .click((event)-> alert event)
-  .html(htmlCode)
+  .html htmlCode
 ```
 
 When calling functions, stick to this rules:
@@ -392,7 +392,17 @@ In cases where method calls are being chained, some adopters of this style prefe
 (($ '#selektor').addClass 'klass').hide() # All calls
 ```
 
-Use function grouping style only when the call is a part of an argument list as outlined above, otherwise this style creates unfimiliar or inconsistent reading.
+Use function grouping style only when the call is a part of an argument list as outlined above, otherwise this style creates unfamiliar or inconsistent reading.
+```coffeescript
+# Yes
+User.find userId, ((err,user)-> user? unless err? )
+
+# Yes
+expect(user).to.be.an('object').and.have.property 'foo'
+
+# No
+(((expect user).to.be.an 'object').and.have.property 'foo')
+```
 
 One-liner functions should be real one-liner.
 
