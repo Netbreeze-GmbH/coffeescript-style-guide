@@ -354,16 +354,17 @@ When calling functions, stick to this rules:
 * omit parentheses except for chaining calls. If parentheses used, stick them to the method they belongs to.
 * always use comas to separate arguments.
 * always encapsulate inlined object in curly braces, if it's not the only argument.
-* always encapsulate inlined function defintion in parentheses, if it's not the only argument.
+* always encapsulate inlined function defintion in parentheses, if it's not the last argument.
 * always encapsulate function calls in parentheses if function is called in an argument list (so called function grouping, see below). Indent after `(` if the inlined call takes longer or nested argument list.
 * body of inlined functions should contain not more than 3 lines. If it does, it's probably better to define it somewhere else first.
 
 ```coffeescript
-elem.bind foo, test:1, test2:2, -> alert      # No
-elem.bind foo, {test:1, test2:2}, (-> alert)  #Yes
+elem.bind foo, test:1, test2:2, -> alert            # Yes
+elem.bind foo, {test:1, test2:2}, (-> alert)        #No
+elem.bind foo, {test:1, test2:2}, (-> alert), true  #Yes
 elem.bind foo, {test:1, test2:2}, (
   myfunc 'yes', true, {}
-)                                             #Yes
+)                                                   #Yes
 
 ```
 
@@ -395,7 +396,7 @@ In cases where method calls are being chained, some adopters of this style prefe
 Use function grouping style only when the call is a part of an argument list as outlined above, otherwise this style creates unfamiliar or inconsistent reading.
 ```coffeescript
 # Yes
-User.find userId, ((err,user)-> user? unless err? )
+User.find userId, (err,user)-> user? unless err?
 
 # Yes
 expect(user).to.be.an('object').and.have.property 'foo'
